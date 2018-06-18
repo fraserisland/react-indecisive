@@ -10,27 +10,56 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //react components are es6 classes that extends what react gives us.
 
+// const obj = {
+//     name: 'Vikram',
+//     getName(){
+//         return this.name
+//     }
+// }
+
+// //functions have undefined for this.
+
+// const getName = obj.getName.bind(obj) //bind gives us ability to set this object.
+// console.log(getName())
+
+
 var IndecisionApp = function (_React$Component) {
     _inherits(IndecisionApp, _React$Component);
 
-    function IndecisionApp() {
+    function IndecisionApp(props) {
         _classCallCheck(this, IndecisionApp);
 
-        return _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
+
+        _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
+        _this.state = {
+            options: ['hi']
+        };
+        return _this;
     }
 
     _createClass(IndecisionApp, [{
+        key: 'handleDeleteOptions',
+        value: function handleDeleteOptions() {
+            this.setState(function () {
+                return {
+                    options: []
+                };
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             var title = 'Indecision';
             var subTitle = 'Put your decision, in the hands of a computer.';
-            var options = ['1', 'thing 2', 'three'];
             return React.createElement(
                 'div',
                 null,
                 React.createElement(Header, { title: title, subtitle: subTitle }),
-                React.createElement(Action, null),
-                React.createElement(Options, { options: options }),
+                React.createElement(Action, { hasOptions: this.state.options.length > 0 }),
+                React.createElement(Options, { options: this.state.options,
+                    handleDeleteOptions: this.handleDeleteOptions
+                }),
                 React.createElement(AddOption, null)
             );
         }
@@ -99,8 +128,9 @@ var Action = function (_React$Component3) {
                 null,
                 React.createElement(
                     'button',
-                    { onClick: this.handlePick },
-                    ' wot shud i dew?/ '
+                    { onClick: this.handlePick,
+                        disabled: !this.props.hasOptions },
+                    'wot shud i dew?/'
                 )
             );
         }
@@ -124,11 +154,6 @@ var Options = function (_React$Component4) {
     }
 
     _createClass(Options, [{
-        key: 'removeAll',
-        value: function removeAll() {
-            console.log('hello');
-        }
-    }, {
         key: 'render',
         value: function render() {
             //render method.
@@ -137,7 +162,7 @@ var Options = function (_React$Component4) {
                 null,
                 React.createElement(
                     'button',
-                    { onClick: this.removeAll },
+                    { onClick: this.props.handleDeleteOptions },
                     ' Remove All '
                 ),
                 this.props.options.map(function (opt) {
@@ -183,15 +208,25 @@ var AddOption = function (_React$Component6) {
     }
 
     _createClass(AddOption, [{
+        key: 'addOption',
+        value: function addOption(e) {
+            e.preventDefault();
+            var option = e.target.elements.option.value.trim();
+            if (option) {
+                alert(option);
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
             return React.createElement(
-                'div',
-                null,
+                'form',
+                { onSubmit: this.addOption },
+                React.createElement('input', { type: 'text', name: 'option' }),
                 React.createElement(
                     'button',
                     null,
-                    ' ad anutha 1. '
+                    ' add option '
                 )
             );
         }
