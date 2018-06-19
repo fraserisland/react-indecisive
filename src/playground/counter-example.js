@@ -60,6 +60,9 @@
 
 //component state
 //constuctor sets up default state.
+
+
+//count - setup default value prop to value: 0
 class Counter extends React.Component {
     constructor(props){
         super(props)
@@ -67,7 +70,7 @@ class Counter extends React.Component {
         this.handleMinusOne = this.handleMinusOne.bind(this)
         this.handleReset = this.handleReset.bind(this)
         this.state = {
-            count: 0,
+            count: props.counter,
             name: 'fraser'
         }
     }
@@ -130,4 +133,8 @@ class Counter extends React.Component {
     }
 }
 
-ReactDOM.render(<Counter />, document.getElementById('app'))
+Counter.defaultProps = {
+    counter: 0
+}
+
+ReactDOM.render(<Counter counter={3}/>, document.getElementById('app'))
