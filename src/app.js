@@ -8,8 +8,32 @@ class IndecisionApp extends React.Component {
       this.handleAddOption = this.handleAddOption.bind(this);
       this.handleDeleteOption = this.handleDeleteOption.bind(this);
       this.state = {
-        options: props.options
+        options: []
       };
+    }
+    //lifecycle methods. only avail in class components. func ones can only render.
+    componentDidMount(){
+        try {
+            const json = localStorage.getItem('options')
+            const options = JSON.parse(json)
+
+            if(options) {
+             this.setState(() => ({options: options}))
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    
+    }
+    componentDidUpdate(prevProp, prevState){
+        if (prevState.options.length !== this.state.options.length){
+            const json = JSON.stringify(this.state.options)
+            localStorage.setItem('options', json)
+            console.log('componentDidUpdate')
+        }
+    }
+    componentWillUnmount(){
+        console.log('componentWillUnmount')
     }
     handleDeleteOptions() {
       this.setState(() => ({ options: [] }));
@@ -59,7 +83,7 @@ class IndecisionApp extends React.Component {
   }
   
   IndecisionApp.defaultProps = {
-    options: []
+    // options: []
   };
   
   const Header = (props) => {
@@ -92,6 +116,7 @@ class IndecisionApp extends React.Component {
     return (
       <div>
         <button onClick={props.handleDeleteOptions}>Remove All</button>
+       {props.options.length === 0 && <p> Please Add an Option :) </p>}
         {
           props.options.map((option) => (
             <Option
@@ -135,6 +160,10 @@ class IndecisionApp extends React.Component {
       const error = this.props.handleAddOption(option);
   
       this.setState(() => ({ error }));
+
+      if (!error) {
+          e.target.elements.option.value = ''
+      }
     }
     render() {
       return (

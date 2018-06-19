@@ -70,8 +70,26 @@ class Counter extends React.Component {
         this.handleMinusOne = this.handleMinusOne.bind(this)
         this.handleReset = this.handleReset.bind(this)
         this.state = {
-            count: props.counter,
+            count: 0,
             name: 'fraser'
+        }
+    }
+    componentDidMount(){
+        try {
+            const json = localStorage.getItem('count')
+            const count = JSON.parse(json)
+            if(!isNaN(count)) {
+             this.setState(() => ({count: count}))
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+    componentDidUpdate(prevProp, prevState){
+        if (prevState.count !== this.state.count){
+            const json = JSON.stringify(this.state.count)
+            localStorage.setItem('count', json)
+            console.log('componentDidUpdate')
         }
     }
     handleAddOne(){
@@ -111,11 +129,11 @@ class Counter extends React.Component {
                 count: 0
             }
         }) 
-        this.setState((prevState) => { 
-            return {
-                count: prevState.count +1  
-            }
-        })  //when react see's  a function in setState it allows react to see both and put them together,
+        // this.setState((prevState) => { 
+        //     return {
+        //         count: prevState.count 
+        //     }
+        // })  //when react see's  a function in setState it allows react to see both and put them together,
             //always pass a function into this.setState
     }
 
@@ -134,7 +152,7 @@ class Counter extends React.Component {
 }
 
 Counter.defaultProps = {
-    counter: 0
+    // counter: 0
 }
 
 ReactDOM.render(<Counter counter={3}/>, document.getElementById('app'))
