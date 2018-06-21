@@ -2,13 +2,18 @@ import React from 'react'
 import Option from './Option.js'
 
   const Options = (props) => (
-      <div>
-        <button 
-        className="button button--link"
-        onClick={props.handleDeleteOptions}
-        >
-        Remove All
-        </button>
+    <div>
+
+      <div className="remove-options">
+          <button 
+          className="button button--link options--remove-all"
+          onClick={props.handleDeleteOptions}
+          >
+          Remove All
+          </button>
+      </div>
+
+      <div className="all-options">
        {props.options.length === 0 && <p> Please Add an Option :) </p>}
         {
           props.options.map((option, index) => (
@@ -20,6 +25,8 @@ import Option from './Option.js'
             />
           ))
         }
+      </div>
+
       </div>
     )
 
